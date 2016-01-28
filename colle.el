@@ -1,0 +1,61 @@
+;;; colle --- colle -*- lexical-binding: t; coding: utf-8; -*-
+
+;;; Commentary:
+
+;;; Code:
+
+(require 'cl-lib)
+(require 'seq)
+
+(cl-defun colle:first (coll)
+  (seq-elt coll 0))
+
+(cl-defun colle:rest (coll)
+  (pcase coll
+    ((seq _ &rest xs)
+     xs)))
+
+(cl-defun colle:map (f coll)
+  (pcase coll
+    ((app type-of `vector)
+     (colle:foldr (lambda (a b)
+                    (colle:conj
+                     (funcall f a) b))
+                  [] coll))
+    ((app type-of `cons)
+     (colle:foldr (lambda (a b)
+                    (colle:conj (funcall f a)
+                                b))
+                  () coll))))
+
+(cl-defun colle:foldr (c n coll)
+  (pcase coll
+    ((pred colle:empty-p) n)
+    ((seq x &rest xs)
+     (funcall c x
+              (colle:foldr c n xs)))))
+
+(cl-defun colle:foldl (c n coll)
+  (pcase coll
+    ((pred colle:empty-p) n)
+    ((seq x &rest xs)
+     (colle:foldl c
+                  (funcall c n x)
+                  xs))))
+
+(cl-defun colle:empty-p (coll)
+  (pcase coll
+    (`[] t)
+    (`() t)))
+
+(cl-defun colle:conj (x coll)
+  (pcase coll
+    ((app type-of `vector)
+     (seq-concatenate 'vector
+                      `[,x] coll))
+    ((app type-of `cons)
+     (cons e coll))))
+
+(provide 'colle)
+
+;;; colle.el ends here
