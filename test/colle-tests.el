@@ -51,6 +51,17 @@
             [1 2 3])
            [1 4 9])))
 
+(ert-deftest colle-tests-remove ()
+  (should (cl-equalp
+           (colle:remove
+            (lambda (x) (eq x 0))
+            '(0 1 2 3 0 4 0 5))
+           '(1 2 3 4 5)))
+  (should (cl-equalp
+           (colle:remove
+            (lambda (x) (eq x 0))
+            [0 1 2 3 0 4 0 5])
+           [1 2 3 4 5])))
 
 ;;; colle-tests.el ends here
 
