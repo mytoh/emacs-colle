@@ -18,7 +18,16 @@
            (colle:foldr (pcase-lambda (a x)
                             (* a x))
                         1 [1 2 3])
-           6)))
+           6))
+
+  )
+
+(ert-deftest colle-tests-map ()
+  (should (cl-equalp
+           (colle:map
+            (lambda (x) (* x x))
+            [1 2 3])
+           [1 4 9])))
 
 
 ;;; colle-tests.el ends here
