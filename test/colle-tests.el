@@ -17,7 +17,13 @@
            '(a b c)))
   (should (cl-equalp
            (colle:conj 'a nil)
-           '(a))))
+           '(a)))
+  (should (cl-equalp
+           (colle:conj 'a [b c])
+           [a b c]))
+  (should (cl-equalp
+           (colle:conj 'a [])
+           [a])))
 
 (ert-deftest colle-tests-foldr ()
   (should (cl-equalp
