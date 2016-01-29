@@ -53,8 +53,9 @@
     ((app type-of `vector)
      (seq-concatenate 'vector
                       `[,x] coll))
-    ((app type-of `cons)
-     (cons e coll))))
+    ((or `()
+         (app type-of `cons))
+     (cons x coll))))
 
 (provide 'colle)
 
