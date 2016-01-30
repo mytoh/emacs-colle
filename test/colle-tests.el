@@ -38,6 +38,20 @@
                         1 [1 2 3])
            6)))
 
+
+(ert-deftest colle-tests-foldr1 ()
+  (should (cl-equalp
+           (colle:foldr1 (pcase-lambda (a x)
+                             (* a x))
+                         '(1 2 3))
+           6))
+
+  (should (cl-equalp
+           (colle:foldr1 (pcase-lambda (a x)
+                             (* a x))
+                         [1 2 3])
+           6)))
+
 (ert-deftest colle-tests-map ()
   (should (cl-equalp
            (colle:map
@@ -75,6 +89,19 @@
             (lambda (x) (zerop x))
             [0 1 2 3 0 4 0 5])
            [0 0 0])))
+
+
+(ert-deftest colle-tests-find ()
+  (should (cl-equalp
+           (colle:find
+            (lambda (x) (evenp x))
+            '(1 2 3 0 4 0 5))
+           2))
+  (should (cl-equalp
+           (colle:find
+            (lambda (x) (zerop x))
+            [1 2 3 0 4 0 5])
+           0)))
 
 ;;; colle-tests.el ends here
 
