@@ -28,6 +28,13 @@
                    b))
                (colle:empty coll)  coll))
 
+(cl-defun colle:filter (f coll)
+  (colle:foldr (lambda (a b)
+                 (if (funcall f a)
+                     (colle:conj a b)
+                   b))
+               (colle:empty coll)  coll))
+
 (cl-defun colle:foldr (c n coll)
   (pcase coll
     ((pred colle:empty-p) n)
