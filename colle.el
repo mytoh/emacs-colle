@@ -52,10 +52,8 @@
 
 (cl-defun colle:foldr1 (f coll)
   (pcase coll
-    (`(,x)
-      x)
-    (`[,x]
-      x)
+    ((pred colle:single-p)
+     (colle:first coll))
     ((seq x &rest xs)
      (funcall f x
               (colle:foldr1 f xs)))))
@@ -77,6 +75,12 @@
   (pcase coll
     ((pred vectorp) [])
     ((pred consp) ())))
+
+(cl-defun colle:single-p (coll)
+  (pcase coll
+    (`(,x) t)
+    (`[,x] t)
+    (_ nil)))
 
 (cl-defun colle:conj (x coll)
   (pcase coll
