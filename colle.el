@@ -35,6 +35,14 @@
                    b))
                (colle:empty coll)  coll))
 
+(cl-defun colle:find (f coll)
+  (pcase coll
+    ((pred colle:empty-p) nil)
+    ((and (let x (colle:first coll))
+          (guard (funcall f x)))
+     x)
+    (_ (colle:find f (colle:rest coll)))))
+
 (cl-defun colle:foldr (c n coll)
   (pcase coll
     ((pred colle:empty-p) n)
