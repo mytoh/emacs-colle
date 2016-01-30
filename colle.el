@@ -42,6 +42,16 @@
      (funcall c x
               (colle:foldr c n xs)))))
 
+(cl-defun colle:foldr1 (f coll)
+  (pcase coll
+    (`(,x)
+      x)
+    (`[,x]
+      x)
+    ((seq x &rest xs)
+     (funcall f x
+              (colle:foldr1 f xs)))))
+
 (cl-defun colle:foldl (c n coll)
   (pcase coll
     ((pred colle:empty-p) n)
