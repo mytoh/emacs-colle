@@ -63,5 +63,18 @@
             [0 1 2 3 0 4 0 5])
            [1 2 3 4 5])))
 
+
+(ert-deftest colle-tests-filter ()
+  (should (cl-equalp
+           (colle:filter
+            (lambda (x) (zerop x))
+            '(0 1 2 3 0 4 0 5))
+           '(0 0 0)))
+  (should (cl-equalp
+           (colle:filter
+            (lambda (x) (zerop x))
+            [0 1 2 3 0 4 0 5])
+           [0 0 0])))
+
 ;;; colle-tests.el ends here
 
