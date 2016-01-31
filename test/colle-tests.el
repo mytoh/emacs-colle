@@ -52,6 +52,38 @@
                          [1 2 3])
            6)))
 
+(ert-deftest colle-tests-foldl ()
+  (should (cl-equalp
+           (colle:foldl (pcase-lambda (a x)
+                            (* a x))
+                        1
+                        '(1 2 3))
+           6))
+
+  (should (cl-equalp
+           (colle:foldl (pcase-lambda (a x)
+                            (* a x))
+                        1
+                        [1 2 3])
+           6)))
+
+
+
+(ert-deftest colle-tests-foldl1 ()
+  (should (cl-equalp
+           (colle:foldl1 (pcase-lambda (a x)
+                             (* a x))
+                         '(1 2 3))
+           6))
+
+  (should (cl-equalp
+           (colle:foldl1 (pcase-lambda (a x)
+                             (* a x))
+                         [1 2 3])
+           6)))
+
+
+
 (ert-deftest colle-tests-map ()
   (should (cl-equalp
            (colle:map
