@@ -36,7 +36,13 @@
            (colle:foldr (pcase-lambda (a x)
                             (* a x))
                         1 [1 2 3])
-           6)))
+           6))
+  (cl-letf ((coll '(1 2 3 4)))
+    (should (= (colle:foldr #'+ 0 coll) 10))
+    (should (= (colle:foldr #'+ 5 coll) 15)))
+  (cl-letf ((coll '()))
+    (should (eq (colle:foldr #'+ 0 coll) 0))
+    (should (eq (colle:foldr #'+ 7 coll) 7))))
 
 
 (ert-deftest colle-tests-foldr1 ()
@@ -107,8 +113,13 @@
            (colle:remove
             (lambda (x) (zerop x))
             [0 1 2 3 0 4 0 5])
-           [1 2 3 4 5])))
-
+           [1 2 3 4 5]))
+  (cl-letf ((coll '(6 7 8 9 10)))
+    (should (equal (colle:remove #'evenp coll) '(7 9)))
+    (should (equal (colle:remove #'oddp coll) '(6 8 10)))
+    (should (cl-equalp (colle:remove (lambda (elt) nil) coll) coll)))
+  (cl-letf ((coll '()))
+    (should (equal (colle:remove #'evenp coll) '()))))
 
 (ert-deftest colle-tests-filter ()
   (should (cl-equalp
@@ -120,8 +131,13 @@
            (colle:filter
             (lambda (x) (zerop x))
             [0 1 2 3 0 4 0 5])
-           [0 0 0])))
-
+           [0 0 0]))
+  (cl-letf ((coll '(6 7 8 9 10)))
+    (should (equal (colle:filter #'evenp coll) '(6 8 10)))
+    (should (equal (colle:filter #'oddp coll) '(7 9)))
+    (should (equal (colle:filter (lambda (elt) nil) coll) '())))
+  (cl-letf ((coll '()))
+    (should (equal (colle:filter #'evenp coll) '()))))
 
 (ert-deftest colle-tests-find ()
   (should (cl-equalp
