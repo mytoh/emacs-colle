@@ -66,6 +66,11 @@
                   (funcall c n x)
                   xs))))
 
+(cl-defun colle:foldl1 (f coll)
+  (pcase coll
+    ((seq x &rest xs)
+     (colle:foldl f x xs))))
+
 (cl-defun colle:empty-p (coll)
   (pcase coll
     (`[] t)
