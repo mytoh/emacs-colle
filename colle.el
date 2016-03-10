@@ -29,12 +29,19 @@
                b))
            (colle:empty coll)  coll))
 
-(cl-defun colle:delete-by (f coll)
-  (colle:foldr (lambda (a b)
-             (if (not (funcall f a))
-                 (colle:conj a b)
-               b))
-           (colle:empty coll)  coll))
+;; deleteBy : (a -> a -> Bool) -> a -> List a -> List a
+(cl-defun colle:delete-by (f x coll)
+  (pcase coll
+    ((pred colle:empty-p)
+     (colle:empty coll))
+    ((seq y &rest ys)
+     (if (funcall f x y)
+         ys
+       (colle:conj y (colle:delete-by f x ys))))))
+
+;; delete : (Eq a) => a -> List a -> List a
+(cl-defun colle:delete (a coll)
+  (colle:delete-by #'cl-equalp a coll))
 
 (cl-defun colle:filter (f coll)
   (colle:foldr (lambda (a b)
@@ -142,8 +149,8 @@
     ((pred colle:single-p)
      (colle:head coll))
     ((and (app colle:head x)
-        (app (colle:index 1) y)
-        (let ys (colle:tail (colle:tail coll))))
+          (app (colle:index 1) y)
+          (let ys (colle:tail (colle:tail coll))))
      (colle:last (colle:conj y ys)))))
 
 (provide 'colle)
