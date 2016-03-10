@@ -21,6 +21,14 @@
                      b))
            (colle:empty coll) coll))
 
+
+(cl-defun colle:remove (f coll)
+  (colle:foldr (lambda (a b)
+             (if (not (funcall f a))
+                 (colle:conj a b)
+               b))
+           (colle:empty coll)  coll))
+
 (cl-defun colle:delete-by (f coll)
   (colle:foldr (lambda (a b)
              (if (not (funcall f a))
