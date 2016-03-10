@@ -17,29 +17,29 @@
 
 (cl-defun colle:map (f coll)
   (colle:foldr (lambda (a b)
-                 (colle:conj (funcall f a)
-                             b))
-               (colle:empty coll) coll))
+             (colle:conj (funcall f a)
+                     b))
+           (colle:empty coll) coll))
 
-(cl-defun colle:remove (f coll)
+(cl-defun colle:delete-by (f coll)
   (colle:foldr (lambda (a b)
-                 (if (not (funcall f a))
-                     (colle:conj a b)
-                   b))
-               (colle:empty coll)  coll))
+             (if (not (funcall f a))
+                 (colle:conj a b)
+               b))
+           (colle:empty coll)  coll))
 
 (cl-defun colle:filter (f coll)
   (colle:foldr (lambda (a b)
-                 (if (funcall f a)
-                     (colle:conj a b)
-                   b))
-               (colle:empty coll)  coll))
+             (if (funcall f a)
+                 (colle:conj a b)
+               b))
+           (colle:empty coll)  coll))
 
 (cl-defun colle:find (f coll)
   (pcase coll
     ((pred colle:empty-p) nil)
     ((and (let x (colle:first coll))
-          (guard (funcall f x)))
+        (guard (funcall f x)))
      x)
     (_ (colle:find f (colle:rest coll)))))
 
@@ -48,7 +48,7 @@
     ((pred colle:empty-p) n)
     ((seq x &rest xs)
      (funcall c x
-              (colle:foldr c n xs)))))
+        (colle:foldr c n xs)))))
 
 (cl-defun colle:foldr1 (f coll)
   (pcase coll
@@ -56,15 +56,15 @@
      (colle:first coll))
     ((seq x &rest xs)
      (funcall f x
-              (colle:foldr1 f xs)))))
+        (colle:foldr1 f xs)))))
 
 (cl-defun colle:foldl (c n coll)
   (pcase coll
     ((pred colle:empty-p) n)
     ((seq x &rest xs)
      (colle:foldl c
-                  (funcall c n x)
-                  xs))))
+              (funcall c n x)
+              xs))))
 
 (cl-defun colle:foldl1 (f coll)
   (pcase coll
@@ -93,8 +93,50 @@
      (seq-concatenate 'vector
                       `[,x] coll))
     ((or `()
-         (app type-of `cons))
+        (app type-of `cons))
      (cons x coll))))
+
+(cl-defun colle:drop-while (f coll)
+  (pcase (colle:first coll)
+    ((pred (lambda (x) (funcall f x)))
+     (colle:drop-while f
+                   (colle:rest coll)))
+    (_ coll)))
+
+(cl-defun colle:unfoldl (args)
+  )
+
+(cl-defun colle:refold (args)
+  )
+
+(cl-defun colle:length (x)
+  (pcase x
+    ((pred colle:empty-p) 0)
+    ((app colle:rest xs) (+ 1 (colle:length xs)))))
+
+(cl-defun colle:index (idx x)
+  (pcase idx
+    (0 (colle:first x))
+    (_ (colle:index (1- idx) (colle:rest x)))))
+
+(cl-defun colle:head (x)
+  (pcase x
+    ((pred colle:empty-p) nil)
+    ((app colle:first x) x)))
+
+(cl-defun colle:tail (x)
+  (pcase x
+    ((pred colle:empty-p) nil)
+    ((app colle:rest xs) xs)))
+
+(cl-defun colle:last (coll)
+  (pcase coll
+    ((pred colle:single-p)
+     (colle:head coll))
+    ((and (app colle:head x)
+        (app (colle:index 1) y)
+        (let ys (colle:tail (colle:tail coll))))
+     (colle:last (colle:conj y ys)))))
 
 (provide 'colle)
 
