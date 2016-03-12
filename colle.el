@@ -40,6 +40,20 @@
        ((seq y &rest ys)
         (colle:last xs))))))
 
+(cl-defun colle:init (coll)
+  (pcase coll
+    ((pred colle:empty-p)
+     [:nothing])
+    ((seq x &rest xs)
+     (pcase xs
+       ((pred colle:empty-p)
+        `[:just ,(colle:empty coll)])
+       ((seq y &rest ys)
+        (pcase (colle:init xs)
+          (`[:nothing]
+            [:nothing])
+          (`[:just ,j]
+            `[:just ,(colle:conj x j)])))))))
 
 (cl-defun colle:map (f coll)
   (colle:foldr (lambda (a b)
@@ -80,7 +94,7 @@
   (pcase coll
     ((pred colle:empty-p) nil)
     ((and (let x (colle:first coll))
-        (guard (funcall f x)))
+          (guard (funcall f x)))
      x)
     (_ (colle:find f (colle:rest coll)))))
 
