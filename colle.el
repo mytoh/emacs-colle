@@ -29,6 +29,18 @@
     ((seq _x &rest xs)
      `[:just ,xs])))
 
+(cl-defun colle:last (coll)
+  (pcase coll
+    ((pred colle:empty-p)
+     [:nothing])
+    ((seq x &rest xs)
+     (pcase xs
+       ((pred colle:empty-p)
+        `[:just ,x])
+       ((seq y &rest ys)
+        (colle:last xs))))))
+
+
 (cl-defun colle:map (f coll)
   (colle:foldr (lambda (a b)
              (colle:conj (funcall f a)
@@ -157,15 +169,6 @@
   (pcase x
     ((pred colle:empty-p) nil)
     ((app colle:rest xs) xs)))
-
-(cl-defun colle:last (coll)
-  (pcase coll
-    ((pred colle:single-p)
-     (colle:head coll))
-    ((and (app colle:head x)
-          (app (colle:index 1) y)
-          (let ys (colle:tail (colle:tail coll))))
-     (colle:last (colle:conj y ys)))))
 
 (provide 'colle)
 
