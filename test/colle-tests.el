@@ -192,8 +192,8 @@
   (should (cl-equalp [1 2 3] (colle:tail [0 1 2 3]))))
 
 (ert-deftest colle-tests-last ()
-  (should (cl-equalp 3 (colle:last '(0 1 2 3))))
-  (should (cl-equalp 3 (colle:last [0 1 2 3]))))
+  (should (cl-equalp [:just 3] (colle:last '(0 1 2 3))))
+  (should (cl-equalp [:just 3] (colle:last [0 1 2 3]))))
 
 ;;; colle-tests.el ends here
 
