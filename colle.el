@@ -55,6 +55,26 @@
           (`[:just ,j]
             `[:just ,(colle:conj x j)])))))))
 
+(cl-defun colle:take (n coll)
+  (pcase `[,n ,coll]
+    (`[0 ,xs]
+      (colle:empty coll))
+    (`[,sn ,(pred colle:empty-p)]
+      (colle:empty coll))
+    (`[,sn ,(seq x &rest xs)]
+      (colle:conj x (colle:take (1- n)
+                        xs)))))
+
+(cl-defun colle:drop (n coll)
+  (pcase `[,n ,coll]
+    (`[0 ,xs]
+      xs)
+    (`[,sn ,(pred colle:empty-p)]
+      (colle:empty coll))
+    (`[,sn ,(seq x &rest xs)]
+      (colle:drop (1- n)
+              xs))))
+
 (cl-defun colle:map (f coll)
   (colle:foldr (lambda (a b)
              (colle:conj (funcall f a)
@@ -94,7 +114,7 @@
   (pcase coll
     ((pred colle:empty-p) nil)
     ((and (let x (colle:first coll))
-          (guard (funcall f x)))
+        (guard (funcall f x)))
      x)
     (_ (colle:find f (colle:rest coll)))))
 
