@@ -10,10 +10,24 @@
 (cl-defun colle:first (coll)
   (seq-elt coll 0))
 
+(cl-defun colle:head (coll)
+  (pcase coll
+    ((pred colle:empty-p)
+     [:nothing])
+    ((seq x &rest _xs)
+     `[:just ,x])))
+
 (cl-defun colle:rest (coll)
   (pcase coll
     ((seq _ &rest xs)
      xs)))
+
+(cl-defun colle:tail (coll)
+  (pcase coll
+    ((pred colle:empty-p)
+     [:nothing])
+    ((seq _x &rest xs)
+     `[:just ,xs])))
 
 (cl-defun colle:map (f coll)
   (colle:foldr (lambda (a b)
