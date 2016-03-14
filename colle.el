@@ -10,7 +10,27 @@
 (cl-defun colle:first (coll)
   (seq-elt coll 0))
 
+(cl-defun colle:index (n coll)
+  (pcase n
+    (0 (colle:head coll))
+    (k (colle:index (- k 1)
+                (colle:tail coll)))))
+
+(cl-defun colle:index^ (n coll)
+  (pcase `[,n ,coll]
+    (`[,_ ,(or `() `[])]
+      [:nothing])
+    (`[0 ,(seq x &rest xs)]
+      `[:just ,x])
+    (`[,n ,(seq x &rest xs)]
+      (colle:index^ (- n 1) xs))))
+
 (cl-defun colle:head (coll)
+  (pcase coll
+    ((seq x &rest _xs)
+     x)))
+
+(cl-defun colle:head^ (coll)
   (pcase coll
     ((pred colle:empty-p)
      [:nothing])
@@ -24,12 +44,24 @@
 
 (cl-defun colle:tail (coll)
   (pcase coll
+    ((seq _x &rest xs)
+     xs)))
+
+(cl-defun colle:tail^ (coll)
+  (pcase coll
     ((pred colle:empty-p)
      [:nothing])
     ((seq _x &rest xs)
      `[:just ,xs])))
 
 (cl-defun colle:last (coll)
+  (pcase coll
+    (`(,x) x)
+    (`[,x] x)
+    ((seq x y &rest ys)
+     (colle:last (colle:conj y ys)))))
+
+(cl-defun colle:last^ (coll)
   (pcase coll
     ((pred colle:empty-p)
      [:nothing])
@@ -38,9 +70,17 @@
        ((pred colle:empty-p)
         `[:just ,x])
        ((seq y &rest ys)
-        (colle:last xs))))))
+        (colle:last^ xs))))))
 
 (cl-defun colle:init (coll)
+  (pcase coll
+    (`(,x) ())
+    (`[,x] [])   
+    ((seq x y &rest ys)
+     (colle:conj x (colle:init
+                (colle:conj y ys))))))
+
+(cl-defun colle:init^ (coll)
   (pcase coll
     ((pred colle:empty-p)
      [:nothing])
@@ -49,7 +89,7 @@
        ((pred colle:empty-p)
         `[:just ,(colle:empty coll)])
        ((seq y &rest ys)
-        (pcase (colle:init xs)
+        (pcase (colle:init^ xs)
           (`[:nothing]
             [:nothing])
           (`[:just ,j]
@@ -114,7 +154,7 @@
   (pcase coll
     ((pred colle:empty-p) nil)
     ((and (let x (colle:first coll))
-        (guard (funcall f x)))
+          (guard (funcall f x)))
      x)
     (_ (colle:find f (colle:rest coll)))))
 
@@ -189,20 +229,6 @@
     ((pred colle:empty-p) 0)
     ((app colle:rest xs) (+ 1 (colle:length xs)))))
 
-(cl-defun colle:index (idx x)
-  (pcase idx
-    (0 (colle:first x))
-    (_ (colle:index (1- idx) (colle:rest x)))))
-
-(cl-defun colle:head (x)
-  (pcase x
-    ((pred colle:empty-p) nil)
-    ((app colle:first x) x)))
-
-(cl-defun colle:tail (x)
-  (pcase x
-    ((pred colle:empty-p) nil)
-    ((app colle:rest xs) xs)))
 
 (provide 'colle)
 
