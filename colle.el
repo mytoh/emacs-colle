@@ -14,7 +14,7 @@
   (pcase n
     (0 (colle:head coll))
     (k (colle:index (- k 1)
-                (colle:tail coll)))))
+                 (colle:tail coll)))))
 
 (cl-defun colle:index^ (n coll)
   (pcase `[,n ,coll]
@@ -78,7 +78,7 @@
     (`[,x] [])   
     ((seq x y &rest ys)
      (colle:conj x (colle:init
-                (colle:conj y ys))))))
+                 (colle:conj y ys))))))
 
 (cl-defun colle:init^ (coll)
   (pcase coll
@@ -103,7 +103,7 @@
       (colle:empty coll))
     (`[,sn ,(seq x &rest xs)]
       (colle:conj x (colle:take (1- n)
-                        xs)))))
+                          xs)))))
 
 (cl-defun colle:drop (n coll)
   (pcase `[,n ,coll]
@@ -113,21 +113,21 @@
       (colle:empty coll))
     (`[,sn ,(seq x &rest xs)]
       (colle:drop (1- n)
-              xs))))
+               xs))))
 
 (cl-defun colle:map (f coll)
   (colle:foldr (lambda (a b)
-             (colle:conj (funcall f a)
-                     b))
-           (colle:empty coll) coll))
+              (colle:conj (funcall f a)
+                       b))
+            (colle:empty coll) coll))
 
 
 (cl-defun colle:remove (f coll)
   (colle:foldr (lambda (a b)
-             (if (not (funcall f a))
-                 (colle:conj a b)
-               b))
-           (colle:empty coll)  coll))
+              (if (not (funcall f a))
+                  (colle:conj a b)
+                b))
+            (colle:empty coll)  coll))
 
 ;; deleteBy : (a -> a -> Bool) -> a -> List a -> List a
 (cl-defun colle:delete-by (f x coll)
@@ -145,16 +145,16 @@
 
 (cl-defun colle:filter (f coll)
   (colle:foldr (lambda (a b)
-             (if (funcall f a)
-                 (colle:conj a b)
-               b))
-           (colle:empty coll)  coll))
+              (if (funcall f a)
+                  (colle:conj a b)
+                b))
+            (colle:empty coll)  coll))
 
 (cl-defun colle:find (f coll)
   (pcase coll
     ((pred colle:empty-p) nil)
     ((and (let x (colle:first coll))
-          (guard (funcall f x)))
+        (guard (funcall f x)))
      x)
     (_ (colle:find f (colle:rest coll)))))
 
@@ -178,8 +178,8 @@
     ((pred colle:empty-p) n)
     ((seq x &rest xs)
      (colle:foldl c
-              (funcall c n x)
-              xs))))
+               (funcall c n x)
+               xs))))
 
 (cl-defun colle:foldl1 (f coll)
   (pcase coll
@@ -215,7 +215,7 @@
   (pcase (colle:first coll)
     ((pred (lambda (x) (funcall f x)))
      (colle:drop-while f
-                   (colle:rest coll)))
+                    (colle:rest coll)))
     (_ coll)))
 
 (cl-defun colle:unfoldl (args)
@@ -228,6 +228,12 @@
   (pcase x
     ((pred colle:empty-p) 0)
     ((app colle:rest xs) (+ 1 (colle:length xs)))))
+
+(cl-defun colle:each (f coll)
+  (colle:foldl
+   (lambda (a e) (funcall f e) coll)
+   ()
+   coll))
 
 
 (provide 'colle)
