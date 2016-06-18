@@ -115,11 +115,26 @@
       (colle:drop (1- n)
                xs))))
 
-(cl-defun colle:map (f coll)
-  (colle:foldr (lambda (a b)
-              (colle:conj (funcall f a)
-                       b))
-            (colle:empty coll) coll))
+(cl-defun colle:map (f col)
+  (pcase col
+    ((pred colle:empty-p col)
+     col)
+    ((pred listp)
+     (seq-reverse
+      (colle:foldl
+       (lambda (a b)
+         (cons (funcall f b)
+               a))
+       (colle:empty col)
+       col)))
+    ((pred vectorp)
+     (seq-reverse
+      (colle:foldl
+       (lambda (a b)
+         (colle:conj
+          (funcall f b) a))
+       (colle:empty col)
+       col)))))
 
 
 (cl-defun colle:remove (f coll)
