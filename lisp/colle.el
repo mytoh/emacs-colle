@@ -176,10 +176,15 @@
 (cl-defun colle:foldl (c n coll)
   (pcase coll
     ((pred colle:empty-p) n)
-    ((seq x &rest xs)
-     (colle:foldl c
-               (funcall c n x)
-               xs))))
+    ((or (pred listp)
+        (pred vectorp))
+     (cl-letf ((acc n))
+       (mapc
+        (lambda (e)
+          (setq acc
+                (funcall c acc e)))
+        coll)
+       acc))))
 
 (cl-defun colle:foldl1 (f coll)
   (pcase coll
