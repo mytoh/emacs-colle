@@ -11,6 +11,31 @@
 
 (ert-delete-all-tests)
 
+(ert-deftest colle-tests-nth ()
+  (cl-letf* ((l (number-sequence 0 10))
+             (v (cl-coerce l 'vector)))
+    (should (cl-equalp
+             (colle:first l) (colle:first v)))
+    (should (cl-equalp
+             (colle:second l) (colle:second v)))
+    (should (cl-equalp
+             (colle:third l) (colle:third v)))
+    (should (cl-equalp
+             (colle:fourth l) (colle:fourth v)))
+    (should (cl-equalp
+             (colle:fifth l) (colle:fifth v)))
+    (should (cl-equalp
+             (colle:sixth l) (colle:sixth v)))
+    (should (cl-equalp
+             (colle:seventh l) (colle:seventh v)))
+    (should (cl-equalp
+             (colle:eighth l) (colle:eighth v)))
+    (should (cl-equalp
+             (colle:ninth l) (colle:ninth v)))
+    (should (cl-equalp
+             (colle:tenth l) (colle:tenth v)))
+    ))
+
 (ert-deftest colle-tests-conj ()
   (should (cl-equalp
            (colle:conj 'a '(b c))
@@ -28,14 +53,14 @@
 (ert-deftest colle-tests-foldr ()
   (should (cl-equalp
            (colle:foldr (pcase-lambda (a x)
-                        (* a x))
-                    1 '(1 2 3))
+                         (* a x))
+                     1 '(1 2 3))
            6))
 
   (should (cl-equalp
            (colle:foldr (pcase-lambda (a x)
-                        (* a x))
-                    1 [1 2 3])
+                         (* a x))
+                     1 [1 2 3])
            6))
   (cl-letf* ((coll '(1 2 3 4))
              (collv (seq-into coll 'vector)))
@@ -54,29 +79,29 @@
 (ert-deftest colle-tests-foldr1 ()
   (should (cl-equalp
            (colle:foldr1 (pcase-lambda (a x)
-                         (* a x))
-                     '(1 2 3))
+                          (* a x))
+                      '(1 2 3))
            6))
 
   (should (cl-equalp
            (colle:foldr1 (pcase-lambda (a x)
-                         (* a x))
-                     [1 2 3])
+                          (* a x))
+                      [1 2 3])
            6)))
 
 (ert-deftest colle-tests-foldl ()
   (should (cl-equalp
            (colle:foldl (pcase-lambda (a x)
-                        (* a x))
-                    1
-                    '(1 2 3))
+                         (* a x))
+                     1
+                     '(1 2 3))
            6))
 
   (should (cl-equalp
            (colle:foldl (pcase-lambda (a x)
-                        (* a x))
-                    1
-                    [1 2 3])
+                         (* a x))
+                     1
+                     [1 2 3])
            6)))
 
 
@@ -84,14 +109,14 @@
 (ert-deftest colle-tests-foldl1 ()
   (should (cl-equalp
            (colle:foldl1 (pcase-lambda (a x)
-                         (* a x))
-                     '(1 2 3))
+                          (* a x))
+                      '(1 2 3))
            6))
 
   (should (cl-equalp
            (colle:foldl1 (pcase-lambda (a x)
-                         (* a x))
-                     [1 2 3])
+                          (* a x))
+                      [1 2 3])
            6)))
 
 

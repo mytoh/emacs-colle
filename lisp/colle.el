@@ -8,7 +8,74 @@
 (require 'seq)
 
 (cl-defun colle:first (coll)
-  (seq-elt coll 0))
+  (pcase coll
+    ((pred listp)
+     (car coll))
+    ((pred vectorp)
+     (aref coll 0))))
+
+(cl-defun colle:second (coll)
+  (pcase coll
+    ((pred listp)
+     (car (cdr coll)))
+    ((pred vectorp)
+     (aref coll 1))))
+
+(cl-defun colle:third (coll)
+  (pcase coll
+    ((pred listp)
+     (car (cdr (cdr coll))))
+    ((pred vectorp)
+     (aref coll 2))))
+
+(cl-defun colle:fourth (coll)
+  (pcase coll
+    ((pred listp)
+     (car (cdr (cdr (cdr coll)))))
+    ((pred vectorp)
+     (aref coll 3))))
+
+(cl-defun colle:fifth (coll)
+  (pcase coll
+    ((pred listp)
+     (car (cdr (cdr (cdr (cdr coll))))))
+    ((pred vectorp)
+     (aref coll 4))))
+
+(cl-defun colle:sixth (coll)
+  (pcase coll
+    ((pred listp)
+     (car (cdr (cdr (cdr (cdr (cdr coll)))))))
+    ((pred vectorp)
+     (aref coll 5))))
+
+(cl-defun colle:seventh (coll)
+  (pcase coll
+    ((pred listp)
+     (car (cdr (cdr (cdr (cdr (cdr (cdr coll))))))))
+    ((pred vectorp)
+     (aref coll 6))))
+
+(cl-defun colle:eighth (coll)
+  (pcase coll
+    ((pred listp)
+     (car (cdr (cdr (cdr (cdr (cdr (cdr (cdr coll)))))))))
+    ((pred vectorp)
+     (aref coll 7))))
+
+(cl-defun colle:ninth (coll)
+  (pcase coll
+    ((pred listp)
+     (car (cdr (cdr (cdr (cdr (cdr (cdr (cdr (cdr coll))))))))))
+    ((pred vectorp)
+     (aref coll 8))))
+
+(cl-defun colle:tenth (coll)
+  (pcase coll
+    ((pred listp)
+     (car (cdr (cdr (cdr (cdr (cdr (cdr (cdr (cdr (cdr coll)))))))))))
+    ((pred vectorp)
+     (aref coll 9))))
 
 (cl-defun colle:index (n coll)
   (pcase n
