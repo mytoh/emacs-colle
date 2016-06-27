@@ -120,21 +120,19 @@
     ((pred colle:empty-p col)
      col)
     ((pred listp)
-     (seq-reverse
-      (colle:foldl
-       (lambda (a b)
-         (cons (funcall f b)
-               a))
-       (colle:empty col)
-       col)))
+     (colle:foldl
+      (lambda (a b)
+        (cons (funcall f b)
+              a))
+      (colle:empty col)
+      col))
     ((pred vectorp)
-     (seq-reverse
-      (colle:foldl
-       (lambda (a b)
-         (colle:conj
-          (funcall f b) a))
-       (colle:empty col)
-       col)))))
+     (colle:foldl
+      (lambda (a b)
+        (colle:conj
+         (funcall f b) a))
+      (colle:empty col)
+      col))))
 
 
 (cl-defun colle:remove (f coll)
@@ -159,17 +157,17 @@
   (colle:delete-by #'cl-equalp a coll))
 
 (cl-defun colle:filter (f coll)
-  (colle:foldr (lambda (a b)
-              (if (funcall f a)
-                  (colle:conj a b)
-                b))
+  (colle:foldl (lambda (a b)
+              (if (funcall f b)
+                  (colle:conj b a)
+                a))
             (colle:empty coll)  coll))
 
 (cl-defun colle:find (f coll)
   (pcase coll
     ((pred colle:empty-p) nil)
     ((and (let x (colle:first coll))
-        (guard (funcall f x)))
+          (guard (funcall f x)))
      x)
     (_ (colle:find f (colle:rest coll)))))
 
@@ -192,14 +190,21 @@
   (pcase coll
     ((pred colle:empty-p) n)
     ((or (pred listp)
-        (pred vectorp))
+         (pred vectorp))
      (cl-letf ((acc n))
        (mapc
         (lambda (e)
           (setq acc
                 (funcall c acc e)))
         coll)
-       acc))))
+       (colle:reverse acc)))))
+
+(cl-defun colle:reverse (coll)
+  (pcase coll
+    ((or (pred listp)
+         (pred vectorp))
+     (reverse coll))
+    (_ coll)))
 
 (cl-defun colle:foldl1 (f coll)
   (pcase coll
