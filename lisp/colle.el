@@ -7,6 +7,8 @@
 (require 'cl-lib)
 (require 'seq)
 
+(cl-deftype colle:coll () `(or list vector))
+
 (cl-defun colle:first (coll)
   (pcase coll
     ((pred listp)
