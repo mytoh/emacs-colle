@@ -10,6 +10,7 @@
 (cl-deftype colle:coll () `(or list vector))
 
 (cl-defun colle:first (coll)
+  (cl-check-type coll colle:coll)
   (pcase coll
     ((pred listp)
      (car coll))
@@ -17,6 +18,7 @@
      (aref coll 0))))
 
 (cl-defun colle:second (coll)
+  (cl-check-type coll colle:coll)
   (pcase coll
     ((pred listp)
      (car (cdr coll)))
@@ -24,6 +26,7 @@
      (aref coll 1))))
 
 (cl-defun colle:third (coll)
+  (cl-check-type coll colle:coll)
   (pcase coll
     ((pred listp)
      (car (cdr (cdr coll))))
@@ -31,6 +34,7 @@
      (aref coll 2))))
 
 (cl-defun colle:fourth (coll)
+  (cl-check-type coll colle:coll)
   (pcase coll
     ((pred listp)
      (car (cdr (cdr (cdr coll)))))
@@ -38,6 +42,7 @@
      (aref coll 3))))
 
 (cl-defun colle:fifth (coll)
+  (cl-check-type coll colle:coll)
   (pcase coll
     ((pred listp)
      (car (cdr (cdr (cdr (cdr coll))))))
@@ -45,6 +50,7 @@
      (aref coll 4))))
 
 (cl-defun colle:sixth (coll)
+  (cl-check-type coll colle:coll)
   (pcase coll
     ((pred listp)
      (car (cdr (cdr (cdr (cdr (cdr coll)))))))
@@ -52,6 +58,7 @@
      (aref coll 5))))
 
 (cl-defun colle:seventh (coll)
+  (cl-check-type coll colle:coll)
   (pcase coll
     ((pred listp)
      (car (cdr (cdr (cdr (cdr (cdr (cdr coll))))))))
@@ -59,6 +66,7 @@
      (aref coll 6))))
 
 (cl-defun colle:eighth (coll)
+  (cl-check-type coll colle:coll)
   (pcase coll
     ((pred listp)
      (car (cdr (cdr (cdr (cdr (cdr (cdr (cdr coll)))))))))
@@ -66,6 +74,7 @@
      (aref coll 7))))
 
 (cl-defun colle:ninth (coll)
+  (cl-check-type coll colle:coll)
   (pcase coll
     ((pred listp)
      (car (cdr (cdr (cdr (cdr (cdr (cdr (cdr (cdr coll))))))))))
@@ -73,6 +82,7 @@
      (aref coll 8))))
 
 (cl-defun colle:tenth (coll)
+  (cl-check-type coll colle:coll)
   (pcase coll
     ((pred listp)
      (car (cdr (cdr (cdr (cdr (cdr (cdr (cdr (cdr (cdr coll)))))))))))
