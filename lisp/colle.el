@@ -215,11 +215,12 @@
 
 
 (cl-defun colle:remove (f coll)
-  (colle:foldr (lambda (a b)
-              (if (not (funcall f a))
-                  (colle:conj a b)
-                b))
-            (colle:empty coll)  coll))
+  (colle:foldl
+   (lambda (a b)
+     (if (not (funcall f b))
+         (colle:conj b a)
+       a))
+   (colle:empty coll)  coll))
 
 ;; deleteBy : (a -> a -> Bool) -> a -> List a -> List a
 (cl-defun colle:delete-by (f x coll)
@@ -246,7 +247,7 @@
   (pcase coll
     ((pred colle:empty-p) nil)
     ((and (let x (colle:first coll))
-          (guard (funcall f x)))
+        (guard (funcall f x)))
      x)
     (_ (colle:find f (colle:rest coll)))))
 
@@ -269,7 +270,7 @@
   (pcase coll
     ((pred colle:empty-p) n)
     ((or (pred listp)
-         (pred vectorp))
+        (pred vectorp))
      (cl-letf ((acc n))
        (mapc
         (lambda (e)
@@ -281,7 +282,7 @@
 (cl-defun colle:reverse (coll)
   (pcase coll
     ((or (pred listp)
-         (pred vectorp))
+        (pred vectorp))
      (reverse coll))
     (_ coll)))
 
