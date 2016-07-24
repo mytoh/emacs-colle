@@ -7,7 +7,7 @@
 (require 'cl-lib)
 (require 'seq)
 
-(cl-deftype colle:coll () `(or list vector))
+(cl-deftype colle:coll () `(or null list vector))
 
 (cl-defun colle:first (coll)
   (cl-check-type coll colle:coll)
