@@ -220,5 +220,13 @@
   (should (cl-equalp [:just 3] (colle:last^ '(0 1 2 3))))
   (should (cl-equalp [:just 3] (colle:last^ [0 1 2 3]))))
 
+(ert-deftest colle-tests-concat ()
+  (should (cl-equalp (colle:concat () '(:a :b :c)) '(:a :b :c)))
+  (should (cl-equalp (colle:concat '(:a :b :c) ()) '(:a :b :c)))
+  (should (cl-equalp (colle:concat [] [:a :b :c]) [:a :b :c]))
+  (should (cl-equalp (colle:concat [:a :b :c] []) [:a :b :c]))
+  (should (cl-equalp (colle:concat '(:a) '(:b :c)) '(:a :b :c)))
+  (should (cl-equalp (colle:concat [:a] [:b :c]) [:a :b :c])))
+
 ;;; colle-tests.el ends here
 

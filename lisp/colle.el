@@ -323,6 +323,25 @@
                     (colle:rest coll)))
     (_ coll)))
 
+(cl-defun colle:concat (c1 c2)
+  (cl-check-type c1 colle:coll)
+  (cl-check-type c2 colle:coll)
+  (pcase `[,c1 ,c2]
+    (`[() ,(app type-of `cons)]
+      c2)
+    (`[,(app type-of `cons) ()]
+      c1)
+    (`[[] ,(app type-of `vector)]
+      c2)
+    (`[,(app type-of `vector) []]
+      c1)
+    (`[,(app type-of `cons) ,(app type-of `cons)]
+      (append c1 c2))
+    (`[,(app type-of `vector) ,(app type-of `vector)]
+      (vconcat c1 c2))
+    (_ [:left "No match"])))
+
+
 (cl-defun colle:unfoldl (args)
   )
 
