@@ -228,5 +228,13 @@
   (should (cl-equalp (colle:concat '(:a) '(:b :c)) '(:a :b :c)))
   (should (cl-equalp (colle:concat [:a] [:b :c]) [:a :b :c])))
 
+(ert-deftest colle-tests-do ()
+  (should (cl-letf ((coll nil))
+            (colle:do (x [a b c d])
+                   (if (eq x 'b)
+                       (setq coll (append coll (list :t)))
+                     (setq coll (append coll (list :f)))))
+            (cl-equalp '(:f :t :f :f)coll))))
+
 ;;; colle-tests.el ends here
 

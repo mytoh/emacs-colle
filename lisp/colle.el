@@ -247,7 +247,7 @@
   (pcase coll
     ((pred colle:empty-p) nil)
     ((and (let x (colle:first coll))
-        (guard (funcall f x)))
+          (guard (funcall f x)))
      x)
     (_ (colle:find f (colle:rest coll)))))
 
@@ -270,7 +270,7 @@
   (pcase coll
     ((pred colle:empty-p) n)
     ((or (pred listp)
-        (pred vectorp))
+         (pred vectorp))
      (cl-letf ((acc n))
        (mapc
         (lambda (e)
@@ -282,7 +282,7 @@
 (cl-defun colle:reverse (coll)
   (pcase coll
     ((or (pred listp)
-        (pred vectorp))
+         (pred vectorp))
      (reverse coll))
     (_ coll)))
 
@@ -359,6 +359,13 @@
    ()
    coll))
 
+(cl-defmacro colle:do ((x coll) &body body)
+  (cl-letf ((c (gensym "colle-do-")))
+    `(cl-letf ((,c ,coll))
+       (while (not (colle:empty-p ,c))
+         (cl-letf ((,x (colle:first ,c)))
+           ,@body)
+         (setq ,c (colle:rest ,c))))))
 
 (provide 'colle)
 
