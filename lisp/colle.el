@@ -10,106 +10,134 @@
 (cl-deftype colle:coll () `(or null list vector))
 
 (cl-defun colle:first (coll)
-  (cl-check-type coll colle:coll)
-  (pcase coll
-    ((pred listp)
+  (declare (pure t)
+           (side-effect-free t))
+  ;; (cl-check-type coll colle:coll)
+  (cl-etypecase coll
+    (list
      (car coll))
-    ((pred vectorp)
+    (vector
      (aref coll 0))))
 
 (cl-defun colle:second (coll)
-  (cl-check-type coll colle:coll)
-  (pcase coll
-    ((pred listp)
+  (declare (pure t)
+           (side-effect-free t))
+  ;; (cl-check-type coll colle:coll)
+  (cl-etypecase coll
+    (list
      (car (cdr coll)))
-    ((pred vectorp)
+    (vector
      (aref coll 1))))
 
 (cl-defun colle:third (coll)
-  (cl-check-type coll colle:coll)
-  (pcase coll
-    ((pred listp)
+  (declare (pure t)
+           (side-effect-free t))
+  ;; (cl-check-type coll colle:coll)
+  (cl-etypecase coll
+    (list
      (car (cdr (cdr coll))))
-    ((pred vectorp)
+    (vector
      (aref coll 2))))
 
 (cl-defun colle:fourth (coll)
-  (cl-check-type coll colle:coll)
-  (pcase coll
-    ((pred listp)
+  (declare (pure t)
+           (side-effect-free t))
+  ;; (cl-check-type coll colle:coll)
+  (cl-etypecase coll
+    (list
      (car (cdr (cdr (cdr coll)))))
-    ((pred vectorp)
+    (vector
      (aref coll 3))))
 
 (cl-defun colle:fifth (coll)
-  (cl-check-type coll colle:coll)
-  (pcase coll
-    ((pred listp)
+  (declare (pure t)
+           (side-effect-free t))
+  ;; (cl-check-type coll colle:coll)
+  (cl-etypecase coll
+    (list
      (car (cdr (cdr (cdr (cdr coll))))))
-    ((pred vectorp)
+    (vector
      (aref coll 4))))
 
 (cl-defun colle:sixth (coll)
-  (cl-check-type coll colle:coll)
-  (pcase coll
-    ((pred listp)
+  (declare (pure t)
+           (side-effect-free t))
+  ;; (cl-check-type coll colle:coll)
+  (cl-etypecase coll
+    (list
      (car (cdr (cdr (cdr (cdr (cdr coll)))))))
-    ((pred vectorp)
+    (vector
      (aref coll 5))))
 
 (cl-defun colle:seventh (coll)
-  (cl-check-type coll colle:coll)
-  (pcase coll
-    ((pred listp)
+  (declare (pure t)
+           (side-effect-free t))
+  ;; (cl-check-type coll colle:coll)
+  (cl-etypecase coll
+    (list
      (car (cdr (cdr (cdr (cdr (cdr (cdr coll))))))))
-    ((pred vectorp)
+    (vector
      (aref coll 6))))
 
 (cl-defun colle:eighth (coll)
-  (cl-check-type coll colle:coll)
-  (pcase coll
-    ((pred listp)
+  (declare (pure t)
+           (side-effect-free t))
+  ;; (cl-check-type coll colle:coll)
+  (cl-etypecase coll
+    (list
      (car (cdr (cdr (cdr (cdr (cdr (cdr (cdr coll)))))))))
-    ((pred vectorp)
+    (vector
      (aref coll 7))))
 
 (cl-defun colle:ninth (coll)
-  (cl-check-type coll colle:coll)
-  (pcase coll
-    ((pred listp)
+  (declare (pure t)
+           (side-effect-free t))
+  ;; (cl-check-type coll colle:coll)
+  (cl-etypecase coll
+    (list
      (car (cdr (cdr (cdr (cdr (cdr (cdr (cdr (cdr coll))))))))))
-    ((pred vectorp)
+    (vector
      (aref coll 8))))
 
 (cl-defun colle:tenth (coll)
-  (cl-check-type coll colle:coll)
-  (pcase coll
-    ((pred listp)
+  (declare (pure t)
+           (side-effect-free t))
+  ;; (cl-check-type coll colle:coll)
+  (cl-etypecase coll
+    (list
      (car (cdr (cdr (cdr (cdr (cdr (cdr (cdr (cdr (cdr coll)))))))))))
-    ((pred vectorp)
+    (vector
      (aref coll 9))))
 
 (cl-defun colle:index (n coll)
+  (declare (pure t)
+           (side-effect-free t))
   (pcase n
     (0 (colle:head coll))
     (k (colle:index (- k 1)
                  (colle:tail coll)))))
 
 (cl-defun colle:index^ (n coll)
+  (declare (pure t)
+           (side-effect-free t))
   (pcase `[,n ,coll]
     (`[,_ ,(or `() `[])]
-      [:nothing])
+     [:nothing])
     (`[0 ,(seq x &rest xs)]
-      `[:just ,x])
+     `[:just ,x])
     (`[,n ,(seq x &rest xs)]
-      (colle:index^ (- n 1) xs))))
+     (colle:index^ (- n 1) xs))))
 
 (cl-defun colle:head (coll)
+  (declare (pure t)
+           (side-effect-free t))
   (pcase coll
     ((seq x &rest _xs)
      x)))
 
 (cl-defun colle:head^ (coll)
+  (declare (pure t)
+           (side-effect-free t))
   (pcase coll
     ((pred colle:empty-p)
      [:nothing])
@@ -117,16 +145,22 @@
      `[:just ,x])))
 
 (cl-defun colle:rest (coll)
+  (declare (pure t)
+           (side-effect-free t))
   (pcase coll
     ((seq _ &rest xs)
      xs)))
 
 (cl-defun colle:tail (coll)
+  (declare (pure t)
+           (side-effect-free t))
   (pcase coll
     ((seq _x &rest xs)
      xs)))
 
 (cl-defun colle:tail^ (coll)
+  (declare (pure t)
+           (side-effect-free t))
   (pcase coll
     ((pred colle:empty-p)
      [:nothing])
@@ -134,6 +168,8 @@
      `[:just ,xs])))
 
 (cl-defun colle:last (coll)
+  (declare (pure t)
+           (side-effect-free t))
   (pcase coll
     (`(,x) x)
     (`[,x] x)
@@ -141,6 +177,8 @@
      (colle:last (colle:conj y ys)))))
 
 (cl-defun colle:last^ (coll)
+  (declare (pure t)
+           (side-effect-free t))
   (pcase coll
     ((pred colle:empty-p)
      [:nothing])
@@ -152,6 +190,8 @@
         (colle:last^ xs))))))
 
 (cl-defun colle:init (coll)
+  (declare (pure t)
+           (side-effect-free t))
   (pcase coll
     (`(,x) ())
     (`[,x] [])   
@@ -160,6 +200,8 @@
                  (colle:conj y ys))))))
 
 (cl-defun colle:init^ (coll)
+  (declare (pure t)
+           (side-effect-free t))
   (pcase coll
     ((pred colle:empty-p)
      [:nothing])
@@ -170,29 +212,33 @@
        ((seq y &rest ys)
         (pcase (colle:init^ xs)
           (`[:nothing]
-            [:nothing])
+           [:nothing])
           (`[:just ,j]
-            `[:just ,(colle:conj x j)])))))))
+           `[:just ,(colle:conj x j)])))))))
 
 (cl-defun colle:take (n coll)
+  (declare (pure t)
+           (side-effect-free t))
   (pcase `[,n ,coll]
     (`[0 ,xs]
-      (colle:empty coll))
+     (colle:empty coll))
     (`[,sn ,(pred colle:empty-p)]
-      (colle:empty coll))
+     (colle:empty coll))
     (`[,sn ,(seq x &rest xs)]
-      (colle:conj x (colle:take (1- n)
-                          xs)))))
+     (colle:conj x (colle:take (1- n)
+                         xs)))))
 
 (cl-defun colle:drop (n coll)
+  (declare (pure t)
+           (side-effect-free t))
   (pcase `[,n ,coll]
     (`[0 ,xs]
-      xs)
+     xs)
     (`[,sn ,(pred colle:empty-p)]
-      (colle:empty coll))
+     (colle:empty coll))
     (`[,sn ,(seq x &rest xs)]
-      (colle:drop (1- n)
-               xs))))
+     (colle:drop (1- n)
+              xs))))
 
 (cl-defun colle:map (f coll)
   (pcase coll
@@ -234,6 +280,8 @@
 
 ;; delete : (Eq a) => a -> List a -> List a
 (cl-defun colle:delete (a coll)
+  (declare (pure t)
+           (side-effect-free t))
   (colle:delete-by #'cl-equalp a coll))
 
 (cl-defun colle:filter (f coll)
@@ -256,7 +304,7 @@
     ((pred colle:empty-p) n)
     ((seq x &rest xs)
      (funcall c x
-        (colle:foldr c n xs)))))
+         (colle:foldr c n xs)))))
 
 (cl-defun colle:foldr1 (f coll)
   (pcase coll
@@ -264,7 +312,7 @@
      (colle:first coll))
     ((seq x &rest xs)
      (funcall f x
-        (colle:foldr1 f xs)))))
+         (colle:foldr1 f xs)))))
 
 (cl-defun colle:foldl (c n coll)
   (pcase coll
@@ -280,6 +328,8 @@
        (colle:reverse acc)))))
 
 (cl-defun colle:reverse (coll)
+  (declare (pure t)
+           (side-effect-free t))
   (pcase coll
     ((or (pred listp)
          (pred vectorp))
@@ -292,22 +342,30 @@
      (colle:foldl f x xs))))
 
 (cl-defun colle:empty-p (coll)
+  (declare (pure t)
+           (side-effect-free t))
   (pcase coll
     (`[] t)
     (`() t)))
 
 (cl-defun colle:empty (coll)
+  (declare (pure t)
+           (side-effect-free t))
   (pcase coll
     ((pred vectorp) [])
     ((pred consp) ())))
 
 (cl-defun colle:single-p (coll)
+  (declare (pure t)
+           (side-effect-free t))
   (pcase coll
     (`(,x) t)
     (`[,x] t)
     (_ nil)))
 
 (cl-defun colle:conj (x coll)
+  (declare (pure t)
+           (side-effect-free t))
   (pcase coll
     ((app type-of `vector)
      (seq-concatenate 'vector
@@ -324,23 +382,30 @@
     (_ coll)))
 
 (cl-defun colle:concat (c1 c2)
-  (cl-check-type c1 colle:coll)
-  (cl-check-type c2 colle:coll)
+  (declare (pure t)
+           (side-effect-free t))
+  ;; (cl-check-type c1 colle:coll)
+  ;; (cl-check-type c2 colle:coll)
   (pcase `[,c1 ,c2]
     (`[() ,(app type-of `cons)]
-      c2)
+     c2)
     (`[,(app type-of `cons) ()]
-      c1)
+     c1)
     (`[[] ,(app type-of `vector)]
-      c2)
+     c2)
     (`[,(app type-of `vector) []]
-      c1)
+     c1)
     (`[,(app type-of `cons) ,(app type-of `cons)]
-      (append c1 c2))
+     (append c1 c2))
     (`[,(app type-of `vector) ,(app type-of `vector)]
-      (vconcat c1 c2))
+     (vconcat c1 c2))
     (_ [:left "No match"])))
 
+(cl-defun colle:flatten (coll)
+  (declare (pure t)
+           (side-effect-free t))
+  (colle:foldr #'colle:concat (colle:empty coll)
+            coll))
 
 (cl-defun colle:unfoldl (args)
   )
@@ -349,6 +414,8 @@
   )
 
 (cl-defun colle:length (x)
+  (declare (pure t)
+           (side-effect-free t))
   (pcase x
     ((pred colle:empty-p) 0)
     ((app colle:rest xs) (+ 1 (colle:length xs)))))
@@ -366,6 +433,17 @@
          (cl-letf ((,x (colle:first ,c)))
            ,@body)
          (setq ,c (colle:rest ,c))))))
+
+(defun colle:replace (smap coll)
+  "Replace elements in coll according to smap.
+[[https://clojuredocs.org/clojure.core/replace][replace - clojure.core | ClojureDocs - Community-Powered Clojure Documentatio...]]
+"
+  )
+
+;; [[https://clojuredocs.org/clojure.walk/walk][walk - clojure.walk | ClojureDocs - Community-Powered Clojure Documentation a...]]
+(defun colle:walk (inner outer form)
+  "docstring"
+  )
 
 (provide 'colle)
 
