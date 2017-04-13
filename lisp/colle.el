@@ -387,17 +387,17 @@
   ;; (cl-check-type c1 colle:coll)
   ;; (cl-check-type c2 colle:coll)
   (pcase `[,c1 ,c2]
-    (`[() ,(app type-of `cons)]
+    (`[() ,(pred consp)]
      c2)
-    (`[,(app type-of `cons) ()]
+    (`[,(pred consp) ()]
      c1)
-    (`[[] ,(app type-of `vector)]
+    (`[[] ,(pred vectorp)]
      c2)
-    (`[,(app type-of `vector) []]
+    (`[,(pred vectorp) []]
      c1)
-    (`[,(app type-of `cons) ,(app type-of `cons)]
+    (`[,(pred consp) ,(pred consp)]
      (append c1 c2))
-    (`[,(app type-of `vector) ,(app type-of `vector)]
+    (`[,(pred vectorp) ,(pred vectorp)]
      (vconcat c1 c2))
     (_ [:left "No match"])))
 
