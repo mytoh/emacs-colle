@@ -236,5 +236,11 @@
                      (setq coll (append coll (list :f)))))
             (cl-equalp '(:f :t :f :f)coll))))
 
+(ert-deftest colle-tests-contains ()
+  (should (eq 'a (colle:contains '(a b c) 'a)))
+  (should (eq 'a (colle:contains [a b c] 'a)))
+  (should (eq nil (colle:contains () 'a)))
+  (should (eq nil (colle:contains [] 'a))))
+
 ;;; colle-tests.el ends here
 

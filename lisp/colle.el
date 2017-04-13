@@ -434,6 +434,11 @@
            ,@body)
          (setq ,c (colle:rest ,c))))))
 
+(cl-defun colle:contains (coll elt)
+  (colle:find
+   (lambda (x) (cl-equalp x elt))
+   coll))
+
 (defun colle:replace (smap coll)
   "Replace elements in coll according to smap.
 [[https://clojuredocs.org/clojure.core/replace][replace - clojure.core | ClojureDocs - Community-Powered Clojure Documentatio...]]
